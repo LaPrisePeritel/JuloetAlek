@@ -18,7 +18,8 @@ namespace TPCamera
 
         [SerializeField]
         private float CameraTransitionSpeedValue;
-        private float CameraTransitionSpeed;
+        [SerializeField]
+        private float CameraTransitionSpeedCurrent;
 
         private float StartDistance;
 
@@ -36,42 +37,49 @@ namespace TPCamera
         private void Start()
         {
             CurrentConfiguration = new(Camera.transform.rotation.eulerAngles.x, Camera.transform.rotation.eulerAngles.y, Camera.transform.rotation.eulerAngles.z, 0, Camera.fieldOfView, Camera.transform.position);
+            SetTargetConfiguration();
         }
 
         private void Update()
         {
-            ApplyConfiguration();
+            SmoothInterpolation();
         }
 
         private void SmoothInterpolation()
         {
-            if(CameraTransitionSpeed * deltaTime < 1)
+            if(CameraTransitionSpeedCurrent * Time.deltaTime < 1)
             {
-                CurrentConfiguration.Pivot = CurrentConfiguration.Pivot + (TargetConfiguration.Pivot - CurrentConfiguration.Pivot) * CameraTransitionSpeedValue * Time.deltaTime;
-                Camera.transform.position = CurrentConfiguration.Pivot;
-                CameraTransitionSpeed -= Vector3.Distance(TargetConfiguration.Pivot, CurrentConfiguration.Pivot);
+                CurrentConfiguration.Pivot += (TargetConfiguration.GetPosition() - CurrentConfiguration.GetPosition()) * CameraTransitionSpeedValue * Time.deltaTime;
+                Camera.transform.position = CurrentConfiguration.GetPosition();
+                CameraTransitionSpeedCurrent = (Vector3.Distance(TargetConfiguration.GetPosition(), CurrentConfiguration.GetPosition()) / StartDistance) * CameraTransitionSpeedValue;
                 //CurrentConfiguration.Yaw = CurrentConfiguration.Yaw + (TargetConfiguration.Yaw - CurrentConfiguration.Yaw) * CameraTransitionSpeedValue * Time.deltaTime;
             }
             else
             {
+                CameraTransitionSpeedCurrent = 0;
                 CurrentConfiguration = TargetConfiguration;
+                Camera.transform.position = CurrentConfiguration.GetPosition();
                 TargetConfiguration = null;
             }
+
+            
         }
 
         public void SetTargetConfiguration()
         {
             TargetConfiguration = ComputeAverageConfiguration();
+            StartDistance = Vector3.Distance(TargetConfiguration.Pivot, CurrentConfiguration.Pivot);
+            CameraTransitionSpeedCurrent = CameraTransitionSpeedValue;
         }
 
         public void ApplyConfiguration()
         {
+            CameraConfiguration cameraConfiguration = ComputeAverageConfiguration();
 
             Camera.transform.rotation = cameraConfiguration.GetRotation();
             Camera.transform.position = cameraConfiguration.GetPosition();
             Camera.fieldOfView = cameraConfiguration.Fov;
 
-            CameraTransitionSpeed = CameraTransitionSpeedValue;
         }
 
 
