@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 namespace TPCamera
@@ -16,7 +17,17 @@ namespace TPCamera
 
         public Vector3 Pivot;
 
-        public Vector3 GetPosition() => Pivot;
+        public CameraConfiguration(float yaw, float pitch, float roll, float distance, float fov, Vector3 pivot)
+        {
+            Yaw = yaw;
+            Pitch = pitch;
+            Roll = roll;
+            Distance = distance;
+            Fov = fov;
+            Pivot = pivot;
+        }
+
+        public Vector3 GetPosition() => Pivot + (GetRotation() * (Vector3.back * Distance));
         public Quaternion GetRotation() => Quaternion.Euler(Pitch, Yaw, Roll);
 
         public void DrawGizmos(Color color)

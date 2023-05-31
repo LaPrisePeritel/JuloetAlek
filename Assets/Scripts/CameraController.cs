@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,7 +10,8 @@ namespace TPCamera
         public static CameraController Instance;
 
         public Camera Camera;
-        public CameraConfiguration CameraConfigurator;
+
+        private List<AView> activeViews = new List<AView>();
 
         private void Awake()
         {
@@ -20,13 +22,99 @@ namespace TPCamera
 
         }
 
-        public void ApplyConfiguration(Camera camera, CameraConfiguration configuration)
+        private void Update()
         {
-            Camera = camera;
-            CameraConfigurator = configuration;
+            ApplyConfiguration();
+        }
+
+        public void ApplyConfiguration()
+        {
+            CameraConfiguration cameraConfiguration = ComputeAverageConfiguration();
+
+            Camera.transform.rotation = cameraConfiguration.GetRotation();
+            Camera.transform.position = cameraConfiguration.GetPosition();
+            Camera.fieldOfView = cameraConfiguration.Fov;
         }
 
 
+        public void AddView(AView view) => activeViews.Add(view);
+
+        public void RemoveView(AView view) => activeViews.Remove(view);
+
+        public CameraConfiguration ComputeAverageConfiguration()
+         => new(ComputeAverageYaw(), ComputeAveragePitch(), ComputeAverageRoll(), ComputeAverageDistance(), ComputeAverageFov(), ComputeAveragePivot());
+
+        public float ComputeAverageYaw()
+        {
+            Vector2 sum = Vector2.zero;
+            foreach (AView view in activeViews)
+            {
+                CameraConfiguration configuration = view.GetConfiguration();
+                sum += new Vector2(Mathf.Cos(configuration.Yaw * Mathf.Deg2Rad), Mathf.Sin(configuration.Yaw * Mathf.Deg2Rad)) * view.Weight;
+            }
+            return Vector2.SignedAngle(Vector2.right, sum);
+        }
+        
+        public float ComputeAveragePitch()
+        {
+            Vector2 sum = Vector2.zero;
+            foreach (AView view in activeViews)
+            {
+                CameraConfiguration configuration = view.GetConfiguration();
+                sum += new Vector2(Mathf.Cos(configuration.Pitch * Mathf.Deg2Rad), Mathf.Sin(configuration.Pitch * Mathf.Deg2Rad)) * view.Weight;
+            }
+            return Vector2.SignedAngle(Vector2.right, sum);
+        }
+
+        public float ComputeAverageRoll()
+        {
+            Vector2 sum = Vector2.zero;
+            foreach (AView view in activeViews)
+            {
+                CameraConfiguration configuration = view.GetConfiguration();
+                sum += new Vector2(Mathf.Cos(configuration.Roll * Mathf.Deg2Rad), Mathf.Sin(configuration.Roll * Mathf.Deg2Rad)) * view.Weight;
+            }
+            return Vector2.SignedAngle(Vector2.right, sum);
+        }
+
+        public Vector3 ComputeAveragePivot()
+        {
+            Vector3 sum = Vector3.zero;
+            float weightSum = 0f;
+            foreach (AView view in activeViews)
+            {
+                CameraConfiguration configuration = view.GetConfiguration();
+                sum += configuration.Pivot * view.Weight;
+                weightSum += view.Weight;
+            }
+            return (sum / weightSum);
+        }
+        
+        public float ComputeAverageDistance()
+        {
+            float sum = 0f;
+            float weightSum = 0f;
+            foreach (AView view in activeViews)
+            {
+                CameraConfiguration configuration = view.GetConfiguration();
+                sum += configuration.Distance * view.Weight;
+                weightSum += view.Weight;
+            }
+            return (sum / weightSum);
+        }
+        
+        public float ComputeAverageFov()
+        {
+            float sum = 0f;
+            float weightSum = 0f;
+            foreach (AView view in activeViews)
+            {
+                CameraConfiguration configuration = view.GetConfiguration();
+                sum += configuration.Fov * view.Weight;
+                weightSum += view.Weight;
+            }
+            return (sum / weightSum);
+        }
     }
 }
 
