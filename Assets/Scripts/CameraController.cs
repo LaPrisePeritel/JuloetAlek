@@ -47,7 +47,7 @@ namespace TPCamera
 
         private void SmoothInterpolation()
         {
-            if(CameraTransitionSpeedCurrent * Time.deltaTime < 1)
+            if(CameraTransitionSpeedCurrent * Time.deltaTime > 0.01)
             {
                 CurrentConfiguration.Pivot += (TargetConfiguration.GetPosition() - CurrentConfiguration.GetPosition()) * CameraTransitionSpeedValue * Time.deltaTime;
                 Camera.transform.position = CurrentConfiguration.GetPosition();
@@ -61,7 +61,7 @@ namespace TPCamera
                 Camera.transform.position = CurrentConfiguration.GetPosition();
                 TargetConfiguration = null;
             }
-
+            Debug.Log(CameraTransitionSpeedCurrent * Time.deltaTime);
             
         }
 
