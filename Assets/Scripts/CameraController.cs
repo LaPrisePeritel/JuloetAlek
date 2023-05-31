@@ -13,6 +13,17 @@ namespace TPCamera
 
         private List<AView> activeViews = new List<AView>();
 
+        public CameraConfiguration CurrentConfiguration;
+        public CameraConfiguration TargetConfiguration;
+
+        [SerializeField]
+        private float CameraTransitionSpeedValue;
+        private float CameraTransitionSpeed;
+
+        private float StartDistance;
+
+
+
         private void Awake()
         {
             if (Instance == null)
@@ -22,18 +33,45 @@ namespace TPCamera
 
         }
 
+        private void Start()
+        {
+            CurrentConfiguration = new(Camera.transform.rotation.eulerAngles.x, Camera.transform.rotation.eulerAngles.y, Camera.transform.rotation.eulerAngles.z, 0, Camera.fieldOfView, Camera.transform.position);
+        }
+
         private void Update()
         {
             ApplyConfiguration();
         }
 
+        private void SmoothInterpolation()
+        {
+            if(CameraTransitionSpeed * deltaTime < 1)
+            {
+                CurrentConfiguration.Pivot = CurrentConfiguration.Pivot + (TargetConfiguration.Pivot - CurrentConfiguration.Pivot) * CameraTransitionSpeedValue * Time.deltaTime;
+                Camera.transform.position = CurrentConfiguration.Pivot;
+                CameraTransitionSpeed -= Vector3.Distance(TargetConfiguration.Pivot, CurrentConfiguration.Pivot);
+                //CurrentConfiguration.Yaw = CurrentConfiguration.Yaw + (TargetConfiguration.Yaw - CurrentConfiguration.Yaw) * CameraTransitionSpeedValue * Time.deltaTime;
+            }
+            else
+            {
+                CurrentConfiguration = TargetConfiguration;
+                TargetConfiguration = null;
+            }
+        }
+
+        public void SetTargetConfiguration()
+        {
+            TargetConfiguration = ComputeAverageConfiguration();
+        }
+
         public void ApplyConfiguration()
         {
-            CameraConfiguration cameraConfiguration = ComputeAverageConfiguration();
 
             Camera.transform.rotation = cameraConfiguration.GetRotation();
             Camera.transform.position = cameraConfiguration.GetPosition();
             Camera.fieldOfView = cameraConfiguration.Fov;
+
+            CameraTransitionSpeed = CameraTransitionSpeedValue;
         }
 
 
