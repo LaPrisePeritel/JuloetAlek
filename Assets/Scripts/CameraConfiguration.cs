@@ -26,6 +26,15 @@ namespace TPCamera
             Fov = fov;
             Pivot = pivot;
         }
+        public CameraConfiguration(CameraConfiguration config)
+        {
+            Yaw = config.Yaw;
+            Pitch = config.Pitch;
+            Roll = config.Roll;
+            Distance = config.Distance;
+            Fov = config.Fov;
+            Pivot = config.Pivot;
+        }
 
         public Vector3 GetPosition() => Pivot + (GetRotation() * (Vector3.back * Distance));
         public Quaternion GetRotation() => Quaternion.Euler(Pitch, Yaw, Roll);

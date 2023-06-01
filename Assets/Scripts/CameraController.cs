@@ -13,6 +13,7 @@ namespace TPCamera
 
         private List<AView> activeViews = new List<AView>();
 
+        public CameraConfiguration InitialConfiguration;
         public CameraConfiguration CurrentConfiguration;
         public CameraConfiguration TargetConfiguration;
 
@@ -23,7 +24,14 @@ namespace TPCamera
 
         private float StartDistance;
 
+        public enum InterpolationType
+        {
+            None,
+            Linear,
+            Smooth
+        }
 
+        public InterpolationType TypeInterpolation;
 
         private void Awake()
         {
@@ -37,48 +45,78 @@ namespace TPCamera
         private void Start()
         {
             CurrentConfiguration = new(Camera.transform.rotation.eulerAngles.x, Camera.transform.rotation.eulerAngles.y, Camera.transform.rotation.eulerAngles.z, 0, Camera.fieldOfView, Camera.transform.position);
+            InitialConfiguration = new(Camera.transform.rotation.eulerAngles.x, Camera.transform.rotation.eulerAngles.y, Camera.transform.rotation.eulerAngles.z, 0, Camera.fieldOfView, Camera.transform.position);
             SetTargetConfiguration();
         }
 
         private void Update()
         {
-            SmoothInterpolation();
+            switch (TypeInterpolation)
+            {
+                case InterpolationType.Linear:
+                    break;
+                case InterpolationType.Smooth:
+                    SmoothInterpolation();
+                    break;
+            }
+        }
+
+        public void ChangeInterpolation(InterpolationType type)
+        {
+            CameraTransitionSpeedCurrent = CameraTransitionSpeedValue;
+            CurrentConfiguration = new(InitialConfiguration);
+            Camera.transform.position = InitialConfiguration.GetPosition();
+            Camera.transform.rotation = InitialConfiguration.GetRotation();
+            SetTargetConfiguration();
+            TypeInterpolation = type;
         }
 
         private void SmoothInterpolation()
         {
-            if(CameraTransitionSpeedCurrent * Time.deltaTime > 0.01)
+            if(CameraTransitionSpeedCurrent > 0.001f)
             {
-                CurrentConfiguration.Pivot += (TargetConfiguration.GetPosition() - CurrentConfiguration.GetPosition()) * CameraTransitionSpeedValue * Time.deltaTime;
-                Camera.transform.position = CurrentConfiguration.GetPosition();
                 CameraTransitionSpeedCurrent = (Vector3.Distance(TargetConfiguration.GetPosition(), CurrentConfiguration.GetPosition()) / StartDistance) * CameraTransitionSpeedValue;
-                //CurrentConfiguration.Yaw = CurrentConfiguration.Yaw + (TargetConfiguration.Yaw - CurrentConfiguration.Yaw) * CameraTransitionSpeedValue * Time.deltaTime;
+                float speedTransition = CameraTransitionSpeedValue * Time.deltaTime;
+                CurrentConfiguration.Pivot += (TargetConfiguration.GetPosition() - CurrentConfiguration.GetPosition()) * speedTransition;
+                //Camera.transform.position = CurrentConfiguration.GetPosition();
+                Camera.transform.position = Vector3.Slerp(CurrentConfiguration.GetPosition(), TargetConfiguration.GetPosition(), speedTransition);
+                Camera.transform.rotation = Quaternion.Slerp(Camera.transform.rotation, TargetConfiguration.GetRotation(), speedTransition);
+
+                CurrentConfiguration.Yaw = Camera.transform.rotation.eulerAngles.x;
+                CurrentConfiguration.Pitch = Camera.transform.rotation.eulerAngles.y;
+                CurrentConfiguration.Roll = Camera.transform.rotation.eulerAngles.z;
             }
             else
             {
                 CameraTransitionSpeedCurrent = 0;
-                CurrentConfiguration = TargetConfiguration;
-                Camera.transform.position = CurrentConfiguration.GetPosition();
-                TargetConfiguration = null;
+                StopInterpolation();
             }
             Debug.Log(CameraTransitionSpeedCurrent * Time.deltaTime);
             
         }
 
+        private void LinearInterlopation()
+        {
+
+        }
+        private void StopInterpolation()
+        {
+            ApplyConfiguration(TargetConfiguration);
+            TargetConfiguration = null;
+            TypeInterpolation = InterpolationType.None;
+        }
         public void SetTargetConfiguration()
         {
             TargetConfiguration = ComputeAverageConfiguration();
             StartDistance = Vector3.Distance(TargetConfiguration.Pivot, CurrentConfiguration.Pivot);
-            CameraTransitionSpeedCurrent = CameraTransitionSpeedValue;
         }
 
-        public void ApplyConfiguration()
+        public void ApplyConfiguration(CameraConfiguration config)
         {
-            CameraConfiguration cameraConfiguration = ComputeAverageConfiguration();
-
-            Camera.transform.rotation = cameraConfiguration.GetRotation();
-            Camera.transform.position = cameraConfiguration.GetPosition();
-            Camera.fieldOfView = cameraConfiguration.Fov;
+            CurrentConfiguration = config;
+            Camera.transform.rotation = config.GetRotation();
+            Camera.transform.position = config.GetPosition();
+            Camera.fieldOfView = config.Fov;
 
         }
 
@@ -160,6 +198,16 @@ namespace TPCamera
                 weightSum += view.Weight;
             }
             return (sum / weightSum);
+        }
+
+        void OnGUI()
+        {
+
+            if (GUI.Button(new Rect(10, 10, 200, 30), "Linear Interpolation"))
+                ChangeInterpolation(InterpolationType.Linear);
+
+            if (GUI.Button(new Rect(10, 70, 200, 30), "Smooth Interpolation"))
+                ChangeInterpolation(InterpolationType.Smooth);
         }
     }
 }

@@ -252,6 +252,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Camera: {fileID: 338543719}
+  InitialConfiguration:
+    Yaw: 0
+    Pitch: 0
+    Roll: 0
+    Distance: 0
+    Fov: 0
+    Pivot: {x: 0, y: 0, z: 0}
   CurrentConfiguration:
     Yaw: 0
     Pitch: 0
@@ -266,8 +273,9 @@ MonoBehaviour:
     Distance: 0
     Fov: 0
     Pivot: {x: 0, y: 0, z: 0}
-  CameraTransitionSpeedValue: 1.2
+  CameraTransitionSpeedValue: 1.5
   CameraTransitionSpeedCurrent: 0
+  TypeInterpolation: 0
 --- !u!81 &338543718
 AudioListener:
   m_ObjectHideFlags: 0
@@ -947,7 +955,7 @@ MonoBehaviour:
   Yaw: 0
   Pitch: 0
   Roll: 0
-  Fov: 0
+  Fov: 80
 --- !u!4 &1762988140
 Transform:
   m_ObjectHideFlags: 0
