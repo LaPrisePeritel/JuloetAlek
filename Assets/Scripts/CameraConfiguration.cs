@@ -42,11 +42,11 @@ namespace TPCamera
         public void DrawGizmos(Color color)
         {
             Gizmos.color = color;
-            Gizmos.DrawSphere(Pivot, 0.25f);
+            Gizmos.DrawSphere(Pivot, 1.0f);
             Vector3 position = GetPosition();
             Gizmos.DrawLine(Pivot, position);
             Gizmos.matrix = Matrix4x4.TRS(position, GetRotation(), Vector3.one);
-            Gizmos.DrawFrustum(Vector3.zero, Fov, 0.5f, 0f, Camera.main.aspect);
+            Gizmos.DrawFrustum(Vector3.zero, Fov, 5.0f, 0f, Camera.main.aspect);
             Gizmos.matrix = Matrix4x4.identity;
         }
     }

@@ -65,8 +65,7 @@ namespace TPCamera
         {
             CameraTransitionSpeedCurrent = CameraTransitionSpeedValue;
             CurrentConfiguration = new(InitialConfiguration);
-            Camera.transform.position = InitialConfiguration.GetPosition();
-            Camera.transform.rotation = InitialConfiguration.GetRotation();
+            Camera.transform.SetPositionAndRotation(InitialConfiguration.GetPosition(), InitialConfiguration.GetRotation());
             SetTargetConfiguration();
             TypeInterpolation = type;
         }
@@ -78,9 +77,9 @@ namespace TPCamera
                 CameraTransitionSpeedCurrent = (Vector3.Distance(TargetConfiguration.GetPosition(), CurrentConfiguration.GetPosition()) / StartDistance) * CameraTransitionSpeedValue;
                 float speedTransition = CameraTransitionSpeedValue * Time.deltaTime;
                 CurrentConfiguration.Pivot += (TargetConfiguration.GetPosition() - CurrentConfiguration.GetPosition()) * speedTransition;
-                //Camera.transform.position = CurrentConfiguration.GetPosition();
                 Camera.transform.position = Vector3.Slerp(CurrentConfiguration.GetPosition(), TargetConfiguration.GetPosition(), speedTransition);
                 Camera.transform.rotation = Quaternion.Slerp(Camera.transform.rotation, TargetConfiguration.GetRotation(), speedTransition);
+                Camera.fieldOfView = Mathf.Lerp(Camera.fieldOfView, TargetConfiguration.Fov, speedTransition);
 
                 CurrentConfiguration.Yaw = Camera.transform.rotation.eulerAngles.x;
                 CurrentConfiguration.Pitch = Camera.transform.rotation.eulerAngles.y;
@@ -91,8 +90,6 @@ namespace TPCamera
                 CameraTransitionSpeedCurrent = 0;
                 StopInterpolation();
             }
-            Debug.Log(CameraTransitionSpeedCurrent * Time.deltaTime);
-            
         }
 
         private void LinearInterlopation()
@@ -102,7 +99,6 @@ namespace TPCamera
         private void StopInterpolation()
         {
             ApplyConfiguration(TargetConfiguration);
-            TargetConfiguration = null;
             TypeInterpolation = InterpolationType.None;
         }
         public void SetTargetConfiguration()
@@ -208,6 +204,12 @@ namespace TPCamera
 
             if (GUI.Button(new Rect(10, 70, 200, 30), "Smooth Interpolation"))
                 ChangeInterpolation(InterpolationType.Smooth);
+        }
+
+        private void OnDrawGizmos()
+        {
+            CurrentConfiguration.DrawGizmos(Color.red);
+            TargetConfiguration.DrawGizmos(Color.green);
         }
     }
 }
