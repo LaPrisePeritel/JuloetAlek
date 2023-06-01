@@ -1,18 +1,24 @@
 using System;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 namespace TPCamera
 {
     [Serializable]
     public class CameraConfiguration
-
-
     {
+        [Range(0, 360)]
         public float Yaw;
+
+        [Range(-90, 90)]
         public float Pitch;
+
+        [Range(-180, 180)]
         public float Roll;
+
+        [Range(0, float.MaxValue)]
         public float Distance;
+
+        [Range(0, 179)]
         public float Fov;
 
         public Vector3 Pivot;
