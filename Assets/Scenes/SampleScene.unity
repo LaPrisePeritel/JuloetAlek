@@ -213,7 +213,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 127330282}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 66.5, y: 0, z: -34.8}
+  m_LocalPosition: {x: 235.8, y: 0, z: -70.4}
   m_LocalScale: {x: 5.667, y: 5.667, z: 5.667}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -267,8 +267,13 @@ MonoBehaviour:
   Weight: 1
   IsActiveOnStart: 1
   TargetConfiguration: {fileID: 1393710015}
+  Yaw: 0
+  Pitch: 0
   Roll: -150
   Fov: 12
+  centralPoint: {fileID: 0}
+  FawOffsetMax: 0
+  PitchOffsetMax: 0
 --- !u!1 &338543716
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,8 +537,13 @@ MonoBehaviour:
   Weight: 99
   IsActiveOnStart: 1
   TargetConfiguration: {fileID: 1393710015}
+  Yaw: 0
+  Pitch: 0
   Roll: 120
   Fov: 90
+  centralPoint: {fileID: 0}
+  FawOffsetMax: 0
+  PitchOffsetMax: 0
 --- !u!1 &756460796
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,6 +641,61 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &918701047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 918701048}
+  - component: {fileID: 918701049}
+  m_Layer: 0
+  m_Name: Rail
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &918701048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918701047}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10.878147, y: 3.6749172, z: -10.5664835}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &918701049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918701047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dda61f44eebc94340a07668d29e3b2e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isLoop: 1
+  nodes:
+  - {fileID: 1694074127}
+  - {fileID: 2089858861}
+  - {fileID: 1823767525}
+  - {fileID: 1554869805}
+  - {fileID: 756460796}
+  - {fileID: 2103295291}
+  - {fileID: 127330282}
+  m_length: 775.8328
+  currentDistance: 373.63
 --- !u!1 &992473850
 GameObject:
   m_ObjectHideFlags: 0
@@ -663,6 +728,7 @@ Transform:
   - {fileID: 1889010147}
   - {fileID: 435184995}
   - {fileID: 171159761}
+  - {fileID: 1689221221}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -957,6 +1023,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1689221220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1689221221}
+  m_Layer: 0
+  m_Name: DollyView
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1689221221
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689221220}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 992473851}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1694074127
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,7 +1291,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823767525}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -82.6, y: 0, z: -13.2}
+  m_LocalPosition: {x: -94.2, y: 0, z: -32.1}
   m_LocalScale: {x: 5.667, y: 5.667, z: 5.667}
   m_ConstrainProportionsScale: 0
   m_Children: []
