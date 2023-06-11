@@ -4,17 +4,17 @@ namespace TPCamera
 {
     public class TriggeredViewVolume : AViewVolume
     {
-        private GameObject target;
+        public GameObject Target;
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject == target)
+            if (other.gameObject == Target)
                 SetActive(true);
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.gameObject == target)
+            if (other.gameObject == Target)
                 SetActive(false);
         }
     }

@@ -8,28 +8,36 @@ namespace TPCamera
     {
         public static ViewVolumeBlender Instance;
 
-        private List<AViewVolume> ActiveViewVolumes;
-        private Dictionary<AView, List<AViewVolume>> VolumesPerViews;
+        private List<AViewVolume> activeViewVolumes;
+        private Dictionary<AView, List<AViewVolume>> volumesPerViews;
 
 
         public void AddVolume(AViewVolume volume)
         {
-            ActiveViewVolumes.Add(volume);
-            if (!VolumesPerViews.ContainsKey(View))
+            activeViewVolumes.Add(volume);
+            if (!volumesPerViews.ContainsKey(View))
             {
-                VolumesPerViews[View] = new List<AViewVolume>();
+                volumesPerViews[View] = new List<AViewVolume>();
                 SetActive(true);
             }
-            VolumesPerViews[View].Add(volume);
+            volumesPerViews[View].Add(volume);
+        }
+
+        private void OnGUI()
+        {
+            foreach (AViewVolume v in activeViewVolumes)
+            {
+                GUILayout.Label(v.name);
+            }
         }
 
         public void RemoveVolume(AViewVolume volume)
         {
-            ActiveViewVolumes.Remove(volume);
-            VolumesPerViews[View].Remove(volume);
-            if (!VolumesPerViews.ContainsKey(View))
+            activeViewVolumes.Remove(volume);
+            volumesPerViews[View].Remove(volume);
+            if (!volumesPerViews.ContainsKey(View))
             {
-                VolumesPerViews.Remove(View);
+                volumesPerViews.Remove(View);
                 SetActive(false);
             }
         }
