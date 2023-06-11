@@ -25,11 +25,11 @@ namespace TPCamera
 
         public bool isAuto = false;
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             Target = MyRail.Bunny.transform;
         }
+
         public override CameraConfiguration GetConfiguration()
         {
             Vector3 direction = (Target.position - Camera.main.transform.position).normalized;
