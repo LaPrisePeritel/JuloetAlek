@@ -50,6 +50,7 @@ namespace TPCamera
 
         private void Update()
         {
+            SetTargetConfiguration();
             switch (TypeInterpolation)
             {
                 case InterpolationType.Linear:
@@ -72,7 +73,6 @@ namespace TPCamera
             CameraTransitionSpeedCurrent = CameraTransitionSpeedValue;
             CurrentConfiguration = new(InitialConfiguration);
             Camera.transform.SetPositionAndRotation(InitialConfiguration.GetPosition(), InitialConfiguration.GetRotation());
-            SetTargetConfiguration();
             TypeInterpolation = type;
         }
 

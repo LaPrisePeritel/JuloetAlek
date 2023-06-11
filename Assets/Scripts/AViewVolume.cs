@@ -22,12 +22,12 @@ namespace TPCamera
 
         protected void SetActive(bool isActive)
         {
+            IsActive = isActive;
             if (IsActive)
                 ViewVolumeBlender.Instance.AddVolume(this);
             else
                 ViewVolumeBlender.Instance.RemoveVolume(this);
 
-            IsActive = isActive;
         }
     }
 }

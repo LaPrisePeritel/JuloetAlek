@@ -25,10 +25,6 @@ namespace TPCamera
 
         public bool IsAuto = false;
 
-        protected override void Start()
-        {
-            base.Start();
-        }
         public override CameraConfiguration GetConfiguration()
         {
             CameraConfiguration returnConfig = new(0,0,0,0,80, Vector3.zero);

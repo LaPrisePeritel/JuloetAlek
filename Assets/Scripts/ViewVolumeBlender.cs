@@ -4,23 +4,23 @@ using UnityEngine;
 
 namespace TPCamera
 {
-    public class ViewVolumeBlender : AViewVolume
+    public class ViewVolumeBlender : MonoBehaviour
     {
         public static ViewVolumeBlender Instance;
 
-        private List<AViewVolume> activeViewVolumes;
-        private Dictionary<AView, List<AViewVolume>> volumesPerViews;
+        private List<AViewVolume> activeViewVolumes = new();
+        private Dictionary<AView, List<AViewVolume>> volumesPerViews = new();
 
 
         public void AddVolume(AViewVolume volume)
         {
             activeViewVolumes.Add(volume);
-            if (!volumesPerViews.ContainsKey(View))
+            if (!volumesPerViews.ContainsKey(volume.View))
             {
-                volumesPerViews[View] = new List<AViewVolume>();
-                SetActive(true);
+                volumesPerViews[volume.View] = new List<AViewVolume>();
+                volume.View.SetActive(true);
             }
-            volumesPerViews[View].Add(volume);
+            volumesPerViews[volume.View].Add(volume);
         }
 
         private void OnGUI()
@@ -34,11 +34,11 @@ namespace TPCamera
         public void RemoveVolume(AViewVolume volume)
         {
             activeViewVolumes.Remove(volume);
-            volumesPerViews[View].Remove(volume);
-            if (!volumesPerViews.ContainsKey(View))
+            volumesPerViews[volume.View].Remove(volume);
+            if (!volumesPerViews.ContainsKey(volume.View))
             {
-                volumesPerViews.Remove(View);
-                SetActive(false);
+                volumesPerViews.Remove(volume.View);
+                volume.View.SetActive(false);
             }
         }
 
