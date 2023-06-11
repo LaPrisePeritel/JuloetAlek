@@ -18,7 +18,7 @@ namespace TPCamera
         public GameObject centralPoint;
         public float YawOffsetMax;
         public float PitchOffsetMax;
-
+        
         public override CameraConfiguration GetConfiguration() => new(CalculateYaw(), CalculatePitch(), Roll, 0, Fov, transform.position);
 
         private float CalculateYaw()

@@ -26,7 +26,8 @@ namespace TPCamera
         {
             None,
             Linear,
-            Smooth
+            Smooth,
+            Rail
         }
 
         public InterpolationType TypeInterpolation;
@@ -52,9 +53,16 @@ namespace TPCamera
             switch (TypeInterpolation)
             {
                 case InterpolationType.Linear:
+                    LinearInterpolation();
                     break;
                 case InterpolationType.Smooth:
                     SmoothInterpolation();
+                    break;
+                case InterpolationType.Rail:
+                    {
+                        DollyManual(Input.GetAxisRaw("Horizontal"));
+                        SmoothInterpolation();
+                    }
                     break;
             }
         }
@@ -90,9 +98,29 @@ namespace TPCamera
             }
         }
 
-        private void LinearInterlopation()
+        private void LinearInterpolation()
         {
+            float speedTransition = CameraTransitionSpeedValue * Time.deltaTime;
+            CurrentConfiguration.Pivot += (TargetConfiguration.GetPosition() - CurrentConfiguration.GetPosition()) * speedTransition;
+            Camera.transform.position = Vector3.Lerp(CurrentConfiguration.GetPosition(), TargetConfiguration.GetPosition(), speedTransition);
+            Camera.transform.rotation = Quaternion.Lerp(Camera.transform.rotation, TargetConfiguration.GetRotation(), speedTransition);
+            Camera.fieldOfView = Mathf.Lerp(Camera.fieldOfView, TargetConfiguration.Fov, speedTransition);
 
+            CurrentConfiguration.Yaw = Camera.transform.rotation.eulerAngles.x;
+            CurrentConfiguration.Pitch = Camera.transform.rotation.eulerAngles.y;
+            CurrentConfiguration.Roll = Camera.transform.rotation.eulerAngles.z;
+        }
+        private void DollyManual(float axis)
+        {
+            foreach(AView view in activeViews)
+            {
+                if ((DollyView)view)
+                {   
+                    DollyView dollyView = (DollyView)view;
+                    dollyView.MyRail.UpdatePosition(axis);
+                    SetTargetConfiguration();
+                }
+            }
         }
         private void StopInterpolation()
         {
@@ -202,6 +230,9 @@ namespace TPCamera
 
             if (GUI.Button(new Rect(10, 70, 200, 30), "Smooth Interpolation"))
                 ChangeInterpolation(InterpolationType.Smooth);
+
+            if (GUI.Button(new Rect(10, 130, 200, 30), "Dolly Cam manual"))
+                ChangeInterpolation(InterpolationType.Rail);
         }
 
         private void OnDrawGizmos()

@@ -213,7 +213,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 127330282}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 235.8, y: 0, z: -70.4}
+  m_LocalPosition: {x: 74.2, y: 0, z: -48.1}
   m_LocalScale: {x: 5.667, y: 5.667, z: 5.667}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -265,15 +265,46 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Weight: 1
-  IsActiveOnStart: 1
-  TargetConfiguration: {fileID: 1393710015}
+  IsActiveOnStart: 0
+  TargetTransform: {fileID: 0}
   Yaw: 0
   Pitch: 0
   Roll: -150
   Fov: 12
   centralPoint: {fileID: 0}
-  FawOffsetMax: 0
+  YawOffsetMax: 0
   PitchOffsetMax: 0
+--- !u!1 &202436045
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 202436046}
+  m_Layer: 0
+  m_Name: BunnyRail
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &202436046
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202436045}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 918701048}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &338543716
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,14 +566,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Weight: 99
-  IsActiveOnStart: 1
-  TargetConfiguration: {fileID: 1393710015}
+  IsActiveOnStart: 0
+  TargetTransform: {fileID: 0}
   Yaw: 0
   Pitch: 0
   Roll: 120
   Fov: 90
   centralPoint: {fileID: 0}
-  FawOffsetMax: 0
+  YawOffsetMax: 0
   PitchOffsetMax: 0
 --- !u!1 &756460796
 GameObject:
@@ -634,7 +665,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 756460796}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.9, y: 0, z: -104}
+  m_LocalPosition: {x: -48.8, y: 0, z: -245.1}
   m_LocalScale: {x: 5.667, y: 5.667, z: 5.667}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -669,7 +700,8 @@ Transform:
   m_LocalPosition: {x: 10.878147, y: 3.6749172, z: -10.5664835}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 202436046}
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -686,6 +718,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLoop: 1
+  Bunny: {fileID: 202436045}
   nodes:
   - {fileID: 1694074127}
   - {fileID: 2089858861}
@@ -695,7 +728,7 @@ MonoBehaviour:
   - {fileID: 2103295291}
   - {fileID: 127330282}
   m_length: 775.8328
-  currentDistance: 373.63
+  currentDistance: 206.59
 --- !u!1 &992473850
 GameObject:
   m_ObjectHideFlags: 0
@@ -1016,7 +1049,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1554869805}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -63.3, y: 0, z: -100.9}
+  m_LocalPosition: {x: -178.9, y: 0, z: -184.6}
   m_LocalScale: {x: 5.667, y: 5.667, z: 5.667}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1032,6 +1065,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1689221221}
+  - component: {fileID: 1689221222}
   m_Layer: 0
   m_Name: DollyView
   m_TagString: Untagged
@@ -1054,6 +1088,27 @@ Transform:
   m_Father: {fileID: 992473851}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1689221222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689221220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b76f5e21b7bcc34d9a87bf99b7c02f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Weight: 1
+  IsActiveOnStart: 1
+  Target: {fileID: 0}
+  Distance: 0
+  Roll: 0
+  Fov: 80
+  MyRail: {fileID: 918701049}
+  DistanceOnRail: 0
+  Speed: 5
 --- !u!1 &1694074127
 GameObject:
   m_ObjectHideFlags: 0
@@ -1291,7 +1346,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823767525}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -94.2, y: 0, z: -32.1}
+  m_LocalPosition: {x: -162, y: 0, z: -19.8}
   m_LocalScale: {x: 5.667, y: 5.667, z: 5.667}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1535,7 +1590,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2103295291}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 53.1, y: 0, z: -75.2}
+  m_LocalPosition: {x: 73.8, y: 0, z: -206.8}
   m_LocalScale: {x: 5.667, y: 5.667, z: 5.667}
   m_ConstrainProportionsScale: 0
   m_Children: []

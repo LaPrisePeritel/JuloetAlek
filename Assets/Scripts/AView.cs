@@ -14,7 +14,7 @@ namespace TPCamera
             CameraController.Instance.AddView(this);
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             if (IsActiveOnStart)
                 SetActive(IsActiveOnStart);

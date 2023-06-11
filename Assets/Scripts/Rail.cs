@@ -10,6 +10,8 @@ namespace TPCamera
     {
         public bool isLoop;
 
+        public GameObject Bunny;
+
         public List<GameObject> nodes;
         [SerializeField]
         private float m_length = 0;
@@ -44,6 +46,12 @@ namespace TPCamera
                     }
                 }
             }
+        }
+
+        public void UpdatePosition(float axis)
+        {
+            currentDistance += axis;
+            Bunny.transform.SetPositionAndRotation(GetPosition(currentDistance), Bunny.transform.rotation);
         }
 
         public float GetLength()
