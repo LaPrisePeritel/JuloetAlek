@@ -23,21 +23,48 @@ namespace TPCamera
         public float DistanceOnRail;
         public float Speed;
 
-        public bool isAuto = false;
+        public bool IsAuto = false;
 
         protected override void Start()
         {
             base.Start();
-            Target = MyRail.Bunny.transform;
         }
         public override CameraConfiguration GetConfiguration()
         {
+            CameraConfiguration returnConfig = new(0,0,0,0,80, Vector3.zero);
+            DistanceOnRail = MyRail.currentDistance;
+
+            //Set Yaw and Pitch
             Vector3 direction = (Target.position - Camera.main.transform.position).normalized;
 
             float yaw = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
             float pitch = Mathf.Asin(direction.y) * Mathf.Rad2Deg;
-            return new(yaw, pitch, Roll, 0, Fov, Target.transform.position);
+
+
+            if (!IsAuto)
+            {
+                returnConfig =  new(yaw, pitch, Roll, 0, Fov, MyRail.GetPosition(DistanceOnRail));
+            }
+            else
+            {
+                float lowestDistance = float.MaxValue;
+                Vector3 targetPos = Vector3.zero;
+                for (int i = 1; i < MyRail.nodes.Count; i++)
+                {
+                    Vector3 nearestPoint = MathUtils.GetNearestPointOnSegment(MyRail.nodes[i].transform.position, MyRail.nodes[i - 1].transform.position, Target.position);
+                    float currentDistance = Vector3.Distance(nearestPoint, Target.transform.position);
+                    if(lowestDistance > currentDistance)
+                    {
+                        lowestDistance = currentDistance;
+                        targetPos = nearestPoint;
+                    }
+                }
+                //Set Yaw and Pitch
+                returnConfig = new(yaw, pitch, Roll, 0, Fov, targetPos);
+            }
+
+            return returnConfig;
         }
     }
 }

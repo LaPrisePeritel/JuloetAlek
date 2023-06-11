@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UIElements;
 
 namespace TPCamera
 {
@@ -10,14 +10,12 @@ namespace TPCamera
     {
         public bool isLoop;
 
-        public GameObject Bunny;
-
         public List<GameObject> nodes;
         [SerializeField]
         private float m_length = 0;
 
         [SerializeField]
-        private float currentDistance = 100;
+        public float currentDistance = 100;
 
         private void Start()
         {
@@ -50,8 +48,14 @@ namespace TPCamera
 
         public void UpdatePosition(float axis)
         {
-            currentDistance += axis;
-            Bunny.transform.SetPositionAndRotation(GetPosition(currentDistance), Bunny.transform.rotation);
+            if (!isLoop)
+            {
+                currentDistance = Mathf.Clamp(currentDistance + axis, 0, m_length);
+            }
+            else
+            {
+                currentDistance += axis;
+            }
         }
 
         public float GetLength()

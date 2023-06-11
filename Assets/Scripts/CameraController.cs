@@ -61,7 +61,7 @@ namespace TPCamera
                 case InterpolationType.Rail:
                     {
                         DollyManual(Input.GetAxisRaw("Horizontal"));
-                        SmoothInterpolation();
+                        LinearInterpolation();
                     }
                     break;
             }
@@ -231,7 +231,7 @@ namespace TPCamera
             if (GUI.Button(new Rect(10, 70, 200, 30), "Smooth Interpolation"))
                 ChangeInterpolation(InterpolationType.Smooth);
 
-            if (GUI.Button(new Rect(10, 130, 200, 30), "Dolly Cam manual"))
+            if (GUI.Button(new Rect(10, 130, 200, 30), "Dolly Cam"))
                 ChangeInterpolation(InterpolationType.Rail);
         }
 
